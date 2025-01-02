@@ -300,8 +300,24 @@
       
         
           
-          Rust环境搭建
-          
+          Rust环境搭建环境搭建(mac系统)
+通过 rustup 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。
+
+1curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+
+添加环境变量
+
+1echo &#x27;source $HOME/.cargo/env&#x27; &gt;&gt; ~/.zshrc
+
+
+检查是否安装成功
+
+1rustc -V
+
+出现rustc 1.83.0 (90b35a623 2024-11-26)表示安装成功
+cargo使用cargo初始化项目1cargo
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2025/01/02/Rust%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/#more" rel="contents">
