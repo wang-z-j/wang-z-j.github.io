@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rust进阶，智能指针什么是智能指针 智能指针（Smart Pointers）是一类数据结构，它不仅包含一个指针，还附带一些额外的元数据和功能。与普通指针不同，智能指针在 Rust 中实现了 Deref 和 Drop 两个 trait，这使得它们可以像指针一样解引用并在离开作用域时自动清理资源。  为什么存在智能指针 资源管理 自动管理资源的分配和释放，避免内存泄露   所有权与借用 Rust 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2025/01/08/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Rust进阶，智能指针什么是智能指针 智能指针（Smart Pointers）是一类数据结构，它不仅包含一个指针，还附带一些额外的元数据和功能。与普通指针不同，智能指针在 Rust 中实现了 Deref 和 Drop 两个 trait，这使得它们可以像指针一样解引用并在离开作用域时自动清理资源。  为什么存在智能指针 资源管理 自动管理资源的分配和释放，避免内存泄露   所有权与借用 Rust 的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-08T13:24:33.746Z">
+<meta property="article:modified_time" content="2025-01-10T01:16:11.482Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2025/01/08/Rust进阶，智能指针/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/08/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-08T21:24:33+08:00">
+                2025-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Rust进阶，智能指针"><a href="#Rust进阶，智能指针" class="headerlink" title="Rust进阶，智能指针"></a>Rust进阶，智能指针</h2><h3 id="什么是智能指针"><a href="#什么是智能指针" class="headerlink" title="什么是智能指针"></a>什么是智能指针</h3><ul>
+<li>智能指针（Smart Pointers）是一类数据结构，它不仅包含一个指针，还附带一些额外的元数据和功能。与普通指针不同，智能指针在 Rust 中实现了 Deref 和 Drop 两个 trait，这使得它们可以像指针一样<strong>解引用</strong>并在离开作用域时<strong>自动清理资源</strong>。</li>
+</ul>
+<h3 id="为什么存在智能指针"><a href="#为什么存在智能指针" class="headerlink" title="为什么存在智能指针"></a>为什么存在智能指针</h3><ul>
+<li>资源管理<ul>
+<li>自动管理资源的分配和释放，避免内存泄露</li>
+</ul>
+</li>
+<li>所有权与借用<ul>
+<li>Rust 的所有权系统通过智能指针来确保内存安全，避免数据竞争和悬垂指针。</li>
+</ul>
+</li>
+<li>复杂数据结构<ul>
+<li>通过智能指针可以构建复杂的数据结构，如递归结构、共享数据等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="智能指针的特性"><a href="#智能指针的特性" class="headerlink" title="智能指针的特性"></a>智能指针的特性</h3><ul>
+<li>Deref Trait<ul>
+<li>实现了 Deref trait 的类型可以像常规引用一样使用 * 运算符解引用。</li>
+<li>如：<code>Box&lt;T&gt;</code> 实现了 Deref，所以可以通过 * 解引用获取其内部数据。</li>
+</ul>
+</li>
+<li><code>Drop</code> Trait<ul>
+<li>实现了 Drop trait 的类型在离开作用域时会自动调用其 drop 方法，用于释放资源。</li>
+<li>例如：<code>Box&lt;T&gt;</code> 在超出作用域时会自动释放堆内存。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Box"><a href="#Box" class="headerlink" title="Box"></a>Box</h3><ul>
+<li>基本概念<ul>
+<li><code>Box&lt;T&gt;</code>将类型T的值分配在堆上，而不是栈</li>
+<li>当Box被销毁时，堆上的数据也会被销毁</li>
+</ul>
+</li>
+</ul>
+<h3 id="Box底层实现"><a href="#Box底层实现" class="headerlink" title="Box底层实现"></a>Box底层实现</h3><ul>
+<li>Box底层原理<ul>
+<li><code>Box&lt;T&gt;</code>实际上是一个智能指针，内部包含一个指向堆上分配内存的裸指针</li>
+<li>当Box<T>被销毁时，Drop trait 会被调用，释放堆上的内存</li>
+</ul>
+</li>
+<li>内存分配<ul>
+<li>Rust 使用系统的全局分配器（如 malloc 和 free）来管理堆内存。</li>
+<li>Box::new 分配内存，Drop 释放内存。</li>
+</ul>
+</li>
+<li>安全性<ul>
+<li>Rust 的所有权系统确保 <code>Box&lt;T&gt;</code> 的内存安全。所有权转移时，堆内存的生命周期也会随之变化。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Box的使用场景"><a href="#Box的使用场景" class="headerlink" title="Box的使用场景"></a>Box的使用场景</h3><h4 id="堆分配"><a href="#堆分配" class="headerlink" title="堆分配"></a>堆分配</h4><p>将数据分配在堆上，而不是栈上。这在处理较大数据结构或数据结构的大小在编译时不确定时尤为重要。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">x</span> = <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(<span class="number">5</span>);</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">_x</span> = *x + <span class="number">2</span>; <span class="comment">// 通过 * 解引用获取其内部数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="动态大小类型"><a href="#动态大小类型" class="headerlink" title="动态大小类型"></a>动态大小类型</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 堆分配的不可变字符串类型，适用于当你需要一个不可变的、堆上的字符串时（比 String 更轻量）。</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">str</span>:<span class="type">Box</span>&lt;<span class="type">str</span>&gt; = <span class="string">&quot;hello rust&quot;</span>.<span class="title function_ invoke__">into</span>();</span><br><span class="line"><span class="comment">// 堆分配的切片类型，适用于需要固定大小、不可变的数组的场景</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">arr</span>:<span class="type">Box</span>&lt;[<span class="type">i32</span>]&gt; = <span class="built_in">vec!</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].<span class="title function_ invoke__">into_boxed_slice</span>()</span><br></pre></td></tr></table></figure>
+
+<h4 id="递归数据结构"><a href="#递归数据结构" class="headerlink" title="递归数据结构"></a>递归数据结构</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">List</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">Cons</span>(<span class="type">i32</span>, <span class="type">Box</span>&lt;List&gt;),</span><br><span class="line">        Nil,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">use</span> List::&#123;Cons, Nil&#125;;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">list</span> = <span class="title function_ invoke__">Cons</span>(<span class="number">1</span>, <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(<span class="title function_ invoke__">Cons</span>(<span class="number">2</span>, <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(<span class="title function_ invoke__">Cons</span>(<span class="number">3</span>, <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(Nil))))));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h4><ul>
+<li><p><code>Box&lt;dyn Trait&gt;</code> 用于类型擦除，允许在运行时决定类型。</p>
+</li>
+<li><p><code>dyn</code> 关键字用于指定动态分发的类型，它允许在运行时决定具体类型。在 Rust 中，<code>dyn</code> 关键字用于实现动态分发的 trait 对象。</p>
+</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类型擦除</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">_box_4</span>() &#123;</span><br><span class="line">    <span class="keyword">trait</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">speak</span>(&amp;<span class="keyword">self</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Dog</span>;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Cat</span>;</span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">Animal</span> <span class="keyword">for</span> <span class="title class_">Dog</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">speak</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;wangwang&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">Animal</span> <span class="keyword">for</span> <span class="title class_">Cat</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">speak</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Meow&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">// 在运行时才决定Animal是Dog 还是Cat</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">animals</span>: <span class="type">Vec</span>&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> Animal&gt;&gt; = <span class="built_in">vec!</span>[<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(Dog), <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(Cat)];</span><br><span class="line">    <span class="keyword">for</span> <span class="variable">animals</span> <span class="keyword">in</span> animals.<span class="title function_ invoke__">iter</span>() &#123;</span><br><span class="line">        animals.<span class="title function_ invoke__">speak</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="内存管理和性能优化"><a href="#内存管理和性能优化" class="headerlink" title="内存管理和性能优化"></a>内存管理和性能优化</h4><ul>
+<li>通过使用 Box，可以控制内存的分配和释放，从而优化性能和内存使用。例如，将大型数据结构放在堆上，而不是栈上，可以减少栈的使用量，从而避免栈溢出。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">largest_arr</span> = <span class="type">Box</span>::<span class="title function_ invoke__">new</span>([<span class="number">0u8</span>; <span class="number">1_000_000</span>]);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Box的优缺点"><a href="#Box的优缺点" class="headerlink" title="Box的优缺点"></a>Box的优缺点</h3><ul>
+<li>优点<ul>
+<li>提供堆内存分配，支持复杂数据结构。</li>
+<li>与 Rust 的所有权系统完美集成，确保内存安全。</li>
+<li>动态分配对象，实现类型擦除。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>需要堆内存分配和释放，可能带来性能开销。</li>
+<li>不适合需要频繁分配和释放的场景。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Drop、Deref、DerefMut"><a href="#Drop、Deref、DerefMut" class="headerlink" title="Drop、Deref、DerefMut"></a>Drop、Deref、DerefMut</h3><h4 id="Drop"><a href="#Drop" class="headerlink" title="Drop"></a>Drop</h4><ul>
+<li><code>Drop</code> trait 用于自定义当值离开作用域时执行的代码，通常用于释放资源（例如内存、文件句柄、网络连接等）。</li>
+<li>定义和实现: <code>Drop</code> trait 定义了一个 drop 方法，当值被释放时，Rust 会自动调用这个方法。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">        name: <span class="type">String</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">new</span>(name: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> Resource &#123;</span><br><span class="line">            Resource &#123;</span><br><span class="line">                name: name.<span class="title function_ invoke__">to_string</span>(),</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">do_somthing</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Using resource: &#123;&#125;&quot;</span>, <span class="keyword">self</span>.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">Drop</span> <span class="keyword">for</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">drop</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Cleaning up resource: &#123;&#125;&quot;</span>, <span class="keyword">self</span>.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">resource</span>: Resource = Resource::<span class="title function_ invoke__">new</span>(<span class="string">&quot;MyResource&quot;</span>);</span><br><span class="line">    resource.<span class="title function_ invoke__">do_somthing</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;End of function&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Deref-Trait"><a href="#Deref-Trait" class="headerlink" title="Deref Trait"></a>Deref Trait</h4><ul>
+<li><code>Deref</code> trait 用于重载解引用运算符（*）。它允许你定义自定义指针类型的解引用行为。</li>
+<li><code>Deref</code> trait 定义了一个 deref 方法，该方法返回指向目标类型的引用。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::ops::&#123;Deref&#125;;</span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">MyBox</span>&lt;T&gt;(T);</span><br><span class="line">    <span class="keyword">impl</span>&lt;T&gt; Deref <span class="keyword">for</span> <span class="title class_">MyBox</span>&lt;T&gt; &#123;</span><br><span class="line">        <span class="keyword">type</span> <span class="title class_">Target</span> = T;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">deref</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> &amp;<span class="keyword">Self</span>::Target &#123;</span><br><span class="line">            &amp;<span class="keyword">self</span>.<span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">y</span> = <span class="title function_ invoke__">MyBox</span>(x);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;y + 2 is: &#123;&#125;&quot;</span>, *y + <span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="DerefMut-Trait"><a href="#DerefMut-Trait" class="headerlink" title="DerefMut Trait"></a>DerefMut Trait</h4><ul>
+<li>与 Deref 类似，DerefMut 用于重载可变解引用运算符（*），允许对自定义类型进行可变解引用。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::ops::&#123;Deref,DerefMut&#125;;</span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">_box_8</span>() &#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">MyBoxMut</span>&lt;T&gt;(T);</span><br><span class="line">    <span class="keyword">impl</span>&lt;T&gt; Deref <span class="keyword">for</span> <span class="title class_">MyBoxMut</span>&lt;T&gt; &#123;</span><br><span class="line">        <span class="keyword">type</span> <span class="title class_">Target</span> = T;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">deref</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> &amp;<span class="keyword">Self</span>::Target &#123;</span><br><span class="line">            &amp;<span class="keyword">self</span>.<span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span>&lt;T&gt; DerefMut <span class="keyword">for</span> <span class="title class_">MyBoxMut</span>&lt;T&gt; &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">deref_mut</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) <span class="punctuation">-&gt;</span> &amp;<span class="keyword">mut</span> <span class="keyword">Self</span>::Target &#123;</span><br><span class="line">            &amp;<span class="keyword">mut</span> <span class="keyword">self</span>.<span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">a</span> = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">b</span> = <span class="title function_ invoke__">MyBoxMut</span>(<span class="number">10</span>);</span><br><span class="line">    *b += <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;b contains after modification: &#123;&#125;&quot;</span>, *b); <span class="comment">// Output: 6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h3><h4 id="作业一"><a href="#作业一" class="headerlink" title="作业一"></a>作业一</h4><ul>
+<li>创建一个大型数组并将其分配到堆上，然后测量和比较分配在堆和栈上的性能差异。</li>
+<li>创建一个包含 1_000_000 个元素的数组，分别将其分配在堆和栈上。<br>使用 std::time::Instant 来测量分配和访问时间。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::&#123; mem, time::Instant&#125;;</span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">mian</span>() &#123;</span><br><span class="line">    <span class="comment">// 栈------------------------</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">start</span> = Instant::<span class="title function_ invoke__">now</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">stack_array</span> = [<span class="number">1</span>; <span class="number">1_000_000</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">stack_duration</span> = start.<span class="title function_ invoke__">elapsed</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;栈分配时间: &#123;:?&#125;&quot;</span>, stack_duration); <span class="comment">// 栈分配时间: 2.391994ms</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;栈数组内存大小: &#123;&#125; 字节&quot;</span>, mem::<span class="title function_ invoke__">size_of_val</span>(&amp;stack_array)); <span class="comment">// 栈数组内存大小: 4000000 字节</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">start</span> = Instant::<span class="title function_ invoke__">now</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">sum_stack</span> = stack_array.<span class="title function_ invoke__">iter</span>().sum::&lt;<span class="type">i32</span>&gt;();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">access_stack_duration</span> = start.<span class="title function_ invoke__">elapsed</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;栈访问时间: &#123;:?&#125;&quot;</span>, access_stack_duration); <span class="comment">// 栈访问时间: 6.591873ms</span></span><br><span class="line">    <span class="comment">// 堆</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">start</span> = Instant::<span class="title function_ invoke__">now</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">heap_array</span> = <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(<span class="built_in">vec!</span>[<span class="number">1</span>; <span class="number">1_000_000</span>]);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">heap_duration</span> = start.<span class="title function_ invoke__">elapsed</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;堆分配时间: &#123;:?&#125;&quot;</span>, heap_duration); <span class="comment">// 堆分配时间: 11.786597ms</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;堆数组内存大小: &#123;&#125; 字节&quot;</span>, mem::<span class="title function_ invoke__">size_of_val</span>(&amp;heap_array)); <span class="comment">// 堆数组内存大小: 8 字节</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">start</span> = Instant::<span class="title function_ invoke__">now</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">sum_heap</span>: <span class="type">i32</span> = heap_array.<span class="title function_ invoke__">iter</span>().<span class="title function_ invoke__">sum</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">access_heap_duration</span> = start.<span class="title function_ invoke__">elapsed</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;堆访问时间: &#123;:?&#125;&quot;</span>, access_heap_duration); <span class="comment">// 堆访问时间: 7.021014ms</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 栈分配时间: 2.391994ms</span></span><br><span class="line"><span class="comment">// 栈数组内存大小: 4000000 字节</span></span><br><span class="line"><span class="comment">// 栈访问时间: 6.591873ms</span></span><br><span class="line"><span class="comment">// 堆分配时间: 11.786597ms</span></span><br><span class="line"><span class="comment">// 堆数组内存大小: 8 字节</span></span><br><span class="line"><span class="comment">// 堆访问时间: 7.021014ms</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="作业二-文件系统模拟"><a href="#作业二-文件系统模拟" class="headerlink" title="作业二 文件系统模拟"></a>作业二 文件系统模拟</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::&#123; fmt &#125;;</span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">    <span class="comment">// 1 定义 `FileSystem` trait 和 Node 枚举</span></span><br><span class="line">    <span class="comment">// 1.1 `FileSystem` trait 包含 `create_file`、`create_folder` 和 `list_contents` 方法。</span></span><br><span class="line">    <span class="keyword">trait</span> <span class="title class_">FileSystem</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">create_file</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, name: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), <span class="type">String</span>&gt;;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">create_folder</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, name: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), <span class="type">String</span>&gt;;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">list_contents</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> <span class="type">Vec</span>&lt;<span class="type">String</span>&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 1.2 `Node` 枚举包含 `File` 和 `Folder` 变体。</span></span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">File</span>(<span class="type">String</span>),                   <span class="comment">// 文件包含文件名</span></span><br><span class="line">        <span class="title function_ invoke__">Folder</span>(<span class="type">String</span>, <span class="type">Vec</span>&lt;<span class="type">Box</span>&lt;Node&gt;&gt;), <span class="comment">// 文件夹名，包含子节点</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2 实现 `FolderNode` 结构体</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">FolderNode</span> &#123;</span><br><span class="line">        name: <span class="type">String</span>,</span><br><span class="line">        contents: <span class="type">Vec</span>&lt;<span class="type">Box</span>&lt;Node&gt;&gt;,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2.1 `FolderNode` 实现 `FileSystem` trait，包含 `name` 和 `contents` 字段。</span></span><br><span class="line">    <span class="comment">// 2.2 使用 `Box` 管理 `contents` 中的子节点。</span></span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">FolderNode</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">new</span>(name: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123;</span><br><span class="line">            FolderNode &#123;</span><br><span class="line">                name: name.<span class="title function_ invoke__">to_string</span>(),</span><br><span class="line">                contents: <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>(),</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3 实现文件系统的基本操作</span></span><br><span class="line">    <span class="comment">// 3.1 `create_file` 方法在文件夹中创建文件</span></span><br><span class="line">    <span class="comment">// 3.2 `create_folder` 方法在文件夹中创建子文件夹。</span></span><br><span class="line">    <span class="comment">// 3.3 `list_contents` 方法列出文件夹的所有内容。</span></span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">FileSystem</span> <span class="keyword">for</span> <span class="title class_">FolderNode</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">create_file</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, name: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), <span class="type">String</span>&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="variable">file</span> = <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(Node::<span class="title function_ invoke__">File</span>(name.<span class="title function_ invoke__">to_string</span>()));</span><br><span class="line">            <span class="keyword">self</span>.contents.<span class="title function_ invoke__">push</span>(file);</span><br><span class="line">            <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">create_folder</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, name: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), <span class="type">String</span>&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="variable">folder</span> = <span class="type">Box</span>::<span class="title function_ invoke__">new</span>(Node::<span class="title function_ invoke__">Folder</span>(name.<span class="title function_ invoke__">to_string</span>(), <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>()));</span><br><span class="line">            <span class="keyword">self</span>.contents.<span class="title function_ invoke__">push</span>(folder);</span><br><span class="line">            <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">list_contents</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> <span class="type">Vec</span>&lt;<span class="type">String</span>&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">contents</span>: <span class="type">Vec</span>&lt;<span class="type">String</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line">            <span class="keyword">for</span> <span class="variable">node</span> <span class="keyword">in</span> &amp;<span class="keyword">self</span>.contents &#123;</span><br><span class="line">                <span class="keyword">match</span> &amp;**node &#123;</span><br><span class="line">                    Node::<span class="title function_ invoke__">File</span>(name) =&gt; contents.<span class="title function_ invoke__">push</span>(<span class="built_in">format!</span>(<span class="string">&quot;File: &#123;&#125;&quot;</span>, name)),</span><br><span class="line">                    Node::<span class="title function_ invoke__">Folder</span>(name, _) =&gt; contents.<span class="title function_ invoke__">push</span>(<span class="built_in">format!</span>(<span class="string">&quot;Folder: &#123;&#125;&quot;</span>, name)),</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            contents</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">fmt</span>::Display <span class="keyword">for</span> <span class="title class_">FolderNode</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">fmt</span>(&amp;<span class="keyword">self</span>, f: &amp;<span class="keyword">mut</span> fmt::Formatter) <span class="punctuation">-&gt;</span> fmt::<span class="type">Result</span> &#123;</span><br><span class="line">            <span class="comment">// 打印文件夹的名字</span></span><br><span class="line">            <span class="built_in">write!</span>(f, <span class="string">&quot;Folder: &#123;&#125;\n&quot;</span>, <span class="keyword">self</span>.name)?;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 遍历文件夹的内容</span></span><br><span class="line">            <span class="keyword">for</span> <span class="variable">item</span> <span class="keyword">in</span> &amp;<span class="keyword">self</span>.contents &#123;</span><br><span class="line">                <span class="keyword">match</span> &amp;**item &#123;</span><br><span class="line">                    <span class="comment">// 如果是文件，打印文件名</span></span><br><span class="line">                    Node::<span class="title function_ invoke__">File</span>(name) =&gt; <span class="built_in">write!</span>(f, <span class="string">&quot;  File: &#123;&#125;\n&quot;</span>, name)?,</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 如果是文件夹，递归打印该文件夹的内容</span></span><br><span class="line">                    Node::<span class="title function_ invoke__">Folder</span>(name, contents) =&gt; &#123;</span><br><span class="line">                        <span class="built_in">write!</span>(f, <span class="string">&quot;  Folder: &#123;&#125;\n&quot;</span>, name)?;</span><br><span class="line">                        <span class="comment">// 递归打印子文件夹的内容</span></span><br><span class="line">                        <span class="keyword">for</span> <span class="variable">sub_item</span> <span class="keyword">in</span> contents &#123;</span><br><span class="line">                            <span class="keyword">match</span> &amp;**sub_item &#123;</span><br><span class="line">                                Node::<span class="title function_ invoke__">File</span>(sub_name) =&gt; <span class="built_in">write!</span>(f, <span class="string">&quot;    File: &#123;&#125;\n&quot;</span>, sub_name)?,</span><br><span class="line">                                Node::<span class="title function_ invoke__">Folder</span>(sub_name, _) =&gt; &#123;</span><br><span class="line">                                    <span class="built_in">write!</span>(f, <span class="string">&quot;    Folder: &#123;&#125;\n&quot;</span>, sub_name)?</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4 测试文件系统的操作</span></span><br><span class="line">    <span class="comment">// 4.1 创建根文件夹并添加文件和文件夹。</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">root</span>: FolderNode = FolderNode::<span class="title function_ invoke__">new</span>(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">    <span class="comment">// 4.2 创建子文件夹并添加文件。</span></span><br><span class="line">    root.<span class="title function_ invoke__">create_file</span>(<span class="string">&quot;file1.txt&quot;</span>).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    root.<span class="title function_ invoke__">create_folder</span>(<span class="string">&quot;subfolder1&quot;</span>).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Node</span>::<span class="title function_ invoke__">Folder</span>(_, <span class="keyword">ref</span> <span class="keyword">mut</span> subfolder_contents) = &amp;<span class="keyword">mut</span> *root.contents[<span class="number">1</span>] &#123;</span><br><span class="line">        subfolder_contents.<span class="title function_ invoke__">push</span>(<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(Node::<span class="title function_ invoke__">File</span>(<span class="string">&quot;new_file.txt&quot;</span>.<span class="title function_ invoke__">to_string</span>())));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4.3 列出文件夹的内容并输出文件系统结构。</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/01/05/Rust-L3%20Rust%20%E5%9F%BA%E7%A1%80/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/01/09/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-number">1.</span> <span class="nav-text">Rust进阶，智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-number">1.1.</span> <span class="nav-text">什么是智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%98%E5%9C%A8%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-number">1.2.</span> <span class="nav-text">为什么存在智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">智能指针的特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Box"><span class="nav-number">1.4.</span> <span class="nav-text">Box</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Box%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.5.</span> <span class="nav-text">Box底层实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Box%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.6.</span> <span class="nav-text">Box的使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%88%86%E9%85%8D"><span class="nav-number">1.6.1.</span> <span class="nav-text">堆分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%A4%A7%E5%B0%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.6.2.</span> <span class="nav-text">动态大小类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.6.3.</span> <span class="nav-text">递归数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4"><span class="nav-number">1.6.4.</span> <span class="nav-text">类型擦除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%92%8C%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">1.6.5.</span> <span class="nav-text">内存管理和性能优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Box%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.7.</span> <span class="nav-text">Box的优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Drop%E3%80%81Deref%E3%80%81DerefMut"><span class="nav-number">1.8.</span> <span class="nav-text">Drop、Deref、DerefMut</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Drop"><span class="nav-number">1.8.1.</span> <span class="nav-text">Drop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Deref-Trait"><span class="nav-number">1.8.2.</span> <span class="nav-text">Deref Trait</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DerefMut-Trait"><span class="nav-number">1.8.3.</span> <span class="nav-text">DerefMut Trait</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A"><span class="nav-number">1.9.</span> <span class="nav-text">作业</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E4%B8%80"><span class="nav-number">1.9.1.</span> <span class="nav-text">作业一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E4%BA%8C-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%A8%A1%E6%8B%9F"><span class="nav-number">1.9.2.</span> <span class="nav-text">作业二 文件系统模拟</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

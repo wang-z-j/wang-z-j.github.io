@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rust进阶，智能指针2Rc 引用计数指针1234567891011121314151617181920fn main() &#123;    #[derive(Debug)]    enum List &#123;        Cons(i32, Rc&lt;List&gt;),        Nil,    &#125;    use List::&#123;Cons, Nil&#125;;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%882/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Rust进阶，智能指针2Rc 引用计数指针1234567891011121314151617181920fn main() &#123;    #[derive(Debug)]    enum List &#123;        Cons(i32, Rc&lt;List&gt;),        Nil,    &#125;    use List::&#123;Cons, Nil&#125;;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-11T06:55:35.272Z">
+<meta property="article:modified_time" content="2025-01-11T07:06:37.502Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2025/01/11/Rust进阶，智能指针2/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%882/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-11T14:55:35+08:00">
+                2025-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Rust进阶，智能指针2"><a href="#Rust进阶，智能指针2" class="headerlink" title="Rust进阶，智能指针2"></a>Rust进阶，智能指针2</h2><h3 id="Rc-引用计数指针"><a href="#Rc-引用计数指针" class="headerlink" title="Rc 引用计数指针"></a>Rc<T> 引用计数指针</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="meta">#[derive(Debug)]</span></span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">List</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">Cons</span>(<span class="type">i32</span>, Rc&lt;List&gt;),</span><br><span class="line">        Nil,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">use</span> List::&#123;Cons, Nil&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">a</span> = Rc::<span class="title function_ invoke__">new</span>(<span class="title function_ invoke__">Cons</span>(<span class="number">5</span>, Rc::<span class="title function_ invoke__">new</span>(<span class="title function_ invoke__">Cons</span>(<span class="number">10</span>, Rc::<span class="title function_ invoke__">new</span>(Nil)))));</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, Rc::<span class="title function_ invoke__">strong_count</span>(&amp;a));</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">b</span> = <span class="title function_ invoke__">Cons</span>(<span class="number">3</span>, Rc::<span class="title function_ invoke__">clone</span>(&amp;a));</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, Rc::<span class="title function_ invoke__">strong_count</span>(&amp;a));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">c</span> = <span class="title function_ invoke__">Cons</span>(<span class="number">4</span>, Rc::<span class="title function_ invoke__">clone</span>(&amp;a));</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, Rc::<span class="title function_ invoke__">strong_count</span>(&amp;a));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;a: &#123;:?&#125;&quot;</span>, a);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;b: &#123;:?&#125;&quot;</span>, b);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;c: &#123;:?&#125;&quot;</span>, c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="RefCell"><a href="#RefCell" class="headerlink" title="RefCell"></a>RefCell<T></h3><ul>
+<li><p><code>RefCell&lt;T&gt;</code> 允许你在其拥有的 <code>T</code> 内部进行修改，即使 <code>RefCell</code> 本身是不可变的。这是通过在运行时进行借用检查实现的。</p>
+</li>
+<li><p><code>RefCell</code> 使用动态借用检查，确保在运行时遵循 Rust 的借用规则。即，在任何时刻，<code>RefCell</code> 只能有一个可变借用或多个不可变借用，但不能同时存在。</p>
+</li>
+<li><p><code>borrow</code> 和 <code>borrow_mut</code> 方法:</p>
+<ul>
+<li><p><code>RefCell</code> 提供了两个方法来获取对内部数据的借用：</p>
+<ul>
+<li><code>borrow()</code>：获取不可变借用（<code>Ref&lt;T&gt;</code>），可以同时有多个。</li>
+<li><code>borrow_mut()</code>：获取可变借用（<code>RefMut&lt;T&gt;</code>），在同一时间只能有一个。</li>
+</ul>
+</li>
+<li><p>借用规则:</p>
+<ul>
+<li>RefCell 在运行时检查借用规则，以防止数据竞争和未定义行为。编译器不进行这些检查，而是依赖 RefCell 在运行时进行。</li>
+</ul>
+</li>
+<li><p>运行时开销:</p>
+<ul>
+<li>因为 RefCell 需要在运行时检查借用规则，所以它会引入一定的性能开销。这在需要在编译时确定所有借用规则的场景中不可替代。</li>
+</ul>
+</li>
+<li><p>错误处理:</p>
+<ul>
+<li>如果违反了借用规则（例如，尝试同时获取多个可变借用），RefCell 会在运行时引发 panic。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用场景</p>
+<ul>
+<li>在需要可变性但又受限于 Rust 的所有权系统时，RefCell 允许在数据结构中使用内部可变性。例如，实现需要共享但修改的数据结构（如图、树）</li>
+<li>RefCell&#96; 主要用于单线程环境。如果你需要在多线程环境中处理内部可变性，应该使用 Mutex 或 RwLock 这类类型。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = RefCell::<span class="title function_ invoke__">new</span>(<span class="number">5</span>);</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 获取不可变借用</span></span><br><span class="line">        <span class="keyword">let</span> <span class="variable">a</span> = data.<span class="title function_ invoke__">borrow</span>();</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;a: &#123;&#125;&quot;</span>, a); <span class="comment">// 5</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">b</span> = data.<span class="title function_ invoke__">borrow_mut</span>();</span><br><span class="line">        *b += <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;b: &#123;&#125;&quot;</span>, b); <span class="comment">// 6</span></span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">a</span> = data.<span class="title function_ invoke__">borrow</span>();</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;a: &#123;&#125;&quot;</span>, a); <span class="comment">// 6</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="引用循环与内存泄露"><a href="#引用循环与内存泄露" class="headerlink" title="引用循环与内存泄露"></a>引用循环与内存泄露</h3><p>在Rust中，引用计数（<code>Rc&lt;T&gt;</code>）和原子引用计数（<code>Arc&lt;T&gt;</code>）可以让多个所有者共享同一个数据。然而，这种共享机制如果不当使用，可能会导致引用循环（reference cycle），从而造成内存泄漏。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="meta">#[derive(Debug)]</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        value: <span class="type">i32</span>,</span><br><span class="line">        next: <span class="type">Option</span>&lt;Rc&lt;RefCell&lt;Node&gt;&gt;&gt;,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">frist</span> = Rc::<span class="title function_ invoke__">new</span>(RefCell::<span class="title function_ invoke__">new</span>(Node &#123;</span><br><span class="line">        value: <span class="number">1</span>,</span><br><span class="line">        next: <span class="literal">None</span>,</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">second</span> = Rc::<span class="title function_ invoke__">new</span>(RefCell::<span class="title function_ invoke__">new</span>(Node &#123;</span><br><span class="line">        value: <span class="number">2</span>,</span><br><span class="line">        next: <span class="literal">None</span>,</span><br><span class="line">    &#125;));</span><br><span class="line">    frist.<span class="title function_ invoke__">borrow_mut</span>().next = <span class="title function_ invoke__">Some</span>(Rc::<span class="title function_ invoke__">clone</span>(&amp;second));</span><br><span class="line">    second.<span class="title function_ invoke__">borrow_mut</span>().next = <span class="title function_ invoke__">Some</span>(Rc::<span class="title function_ invoke__">clone</span>(&amp;frist));</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, &amp;frist);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Weak"><a href="#Weak" class="headerlink" title="Weak"></a>Weak</h3><p>弱引用</p>
+<ul>
+<li>特点:<ul>
+<li>非所有权引用: <code>Weak&lt;T&gt;</code> 并不拥有数据的所有权，因此它不会影响 <code>Rc&lt;T&gt;</code> 的引用计数。</li>
+<li>不会引发内存泄漏: 由于 <code>Weak&lt;T&gt;</code> 不增加引用计数，可以避免引用循环问题，从而避免内存泄漏。</li>
+<li>必须升级: <code>Weak&lt;T&gt;</code> 是一个非所有权引用，因此在使用数据之前，需要通过 upgrade() 方法将其升级为 <code>Rc&lt;T&gt;</code>。如果数据已经被释放，<code>upgrade()</code> 会返回 <code>None</code>。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">_refcell_3</span>() &#123;</span><br><span class="line">    <span class="meta">#[derive(Debug)]</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        value: <span class="type">i32</span>,</span><br><span class="line">        next: <span class="type">Option</span>&lt;Rc&lt;RefCell&lt;Node&gt;&gt;&gt;,</span><br><span class="line">        prev: <span class="type">Option</span>&lt;Weak&lt;RefCell&lt;Node&gt;&gt;&gt;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">frist</span> = Rc::<span class="title function_ invoke__">new</span>(RefCell::<span class="title function_ invoke__">new</span>(Node &#123;</span><br><span class="line">        value: <span class="number">1</span>,</span><br><span class="line">        next: <span class="literal">None</span>,</span><br><span class="line">        prev: <span class="literal">None</span>,</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">second</span> = Rc::<span class="title function_ invoke__">new</span>(RefCell::<span class="title function_ invoke__">new</span>(Node &#123;</span><br><span class="line">        value: <span class="number">2</span>,</span><br><span class="line">        next: <span class="literal">None</span>,</span><br><span class="line">        prev: <span class="literal">None</span>,</span><br><span class="line">    &#125;));</span><br><span class="line">    frist.<span class="title function_ invoke__">borrow_mut</span>().next = <span class="title function_ invoke__">Some</span>(Rc::<span class="title function_ invoke__">clone</span>(&amp;second));</span><br><span class="line">    second.<span class="title function_ invoke__">borrow_mut</span>().prev = <span class="title function_ invoke__">Some</span>(Rc::<span class="title function_ invoke__">downgrade</span>(&amp;frist));</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, &amp;frist);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="强引用与弱引用的主要区别"><a href="#强引用与弱引用的主要区别" class="headerlink" title="强引用与弱引用的主要区别"></a>强引用与弱引用的主要区别</h3><ol>
+<li><p><strong>所有权</strong>:</p>
+<ul>
+<li>强引用 (<code>Rc&lt;T&gt;</code>): 持有数据的所有权，保证数据在作用域内不会被释放。</li>
+<li>弱引用 (<code>Weak&lt;T&gt;</code>): 不持有数据的所有权，不影响数据的生命周期。</li>
+</ul>
+</li>
+<li><p><strong>引用计数</strong>:</p>
+<ul>
+<li>强引用: 增加引用计数，数据被多个所有者共享。</li>
+<li>弱引用: 不增加引用计数，不干扰 <code>Rc&lt;T&gt;</code> 的生命周期管理。</li>
+</ul>
+</li>
+<li><p><strong>内存管理</strong>:</p>
+<ul>
+<li>强引用: 只有当所有强引用都被丢弃时，数据才会被释放。</li>
+<li>弱引用: 只能通过升级 (<code>upgrade()</code>) 来访问数据，如果数据已经被释放，则升级会失败。</li>
+</ul>
+</li>
+<li><p><strong>适用场景</strong>:</p>
+<ul>
+<li>强引用: 当你希望共享数据并确保数据在至少一个强引用存在时不会被释放。</li>
+<li>弱引用: 当你需要避免引用循环或只需要偶尔访问数据，不想持有其所有权时</li>
+</ul>
+</li>
+</ol>
+<h3 id="课后作业"><a href="#课后作业" class="headerlink" title="课后作业"></a>课后作业</h3><ul>
+<li>任务: 实现一个简单的社交网络系统，包含用户和朋友关系。使用 Rc<T>, RefCell<T>, Weak<T> 来处理用户和朋友之间的关系，并避免循环引用导致的内存泄漏。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">_work_1</span>() &#123;</span><br><span class="line">    <span class="meta">#[derive(Debug)]</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">User</span> &#123;</span><br><span class="line">        name: <span class="type">String</span>,</span><br><span class="line">        firends: RefCell&lt;<span class="type">Vec</span>&lt;Weak&lt;User&gt;&gt;&gt;,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span> <span class="title class_">User</span> &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">new</span>(name: <span class="type">String</span>) <span class="punctuation">-&gt;</span> Rc&lt;<span class="keyword">Self</span>&gt; &#123;</span><br><span class="line">            Rc::<span class="title function_ invoke__">new</span>(User &#123;</span><br><span class="line">                name,</span><br><span class="line">                firends: RefCell::<span class="title function_ invoke__">new</span>(<span class="type">Vec</span>::<span class="title function_ invoke__">new</span>()),</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">add_firend</span>(<span class="keyword">self</span>: &amp;Rc&lt;<span class="keyword">Self</span>&gt;, other: &amp;Rc&lt;<span class="keyword">Self</span>&gt;) &#123;</span><br><span class="line">            <span class="keyword">self</span>.firends.<span class="title function_ invoke__">borrow_mut</span>().<span class="title function_ invoke__">push</span>(Rc::<span class="title function_ invoke__">downgrade</span>(other));</span><br><span class="line">            other.firends.<span class="title function_ invoke__">borrow_mut</span>().<span class="title function_ invoke__">push</span>(Rc::<span class="title function_ invoke__">downgrade</span>(<span class="keyword">self</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">show_firends</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="variable">firends</span>: std::cell::Ref&lt;<span class="symbol">&#x27;_</span>, <span class="type">Vec</span>&lt;Weak&lt;User&gt;&gt;&gt; = <span class="keyword">self</span>.firends.<span class="title function_ invoke__">borrow</span>();</span><br><span class="line">            <span class="keyword">for</span> <span class="variable">firend</span> <span class="keyword">in</span> firends.<span class="title function_ invoke__">iter</span>() &#123;</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Some</span>(firend_rc) = firend.<span class="title function_ invoke__">upgrade</span>() &#123;</span><br><span class="line">                    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, firend_rc.name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user1</span> = User::<span class="title function_ invoke__">new</span>(<span class="string">&quot;wzj&quot;</span>.<span class="title function_ invoke__">to_string</span>());</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user2</span> = User::<span class="title function_ invoke__">new</span>(<span class="string">&quot;wr&quot;</span>.<span class="title function_ invoke__">to_string</span>());</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user3</span> = User::<span class="title function_ invoke__">new</span>(<span class="string">&quot;zs&quot;</span>.<span class="title function_ invoke__">to_string</span>());</span><br><span class="line">    user1.<span class="title function_ invoke__">add_firend</span>(&amp;user2);</span><br><span class="line">    user1.<span class="title function_ invoke__">add_firend</span>(&amp;user3);</span><br><span class="line">    user1.<span class="title function_ invoke__">show_firends</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;user1: &#123;:?&#125;&quot;</span>, user1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/01/10/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F%20lifetime/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%89%B9%E6%80%A7%EF%BC%88Trait%EF%BC%89/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%882"><span class="nav-number">1.</span> <span class="nav-text">Rust进阶，智能指针2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rc-%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-number">1.1.</span> <span class="nav-text">Rc 引用计数指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RefCell"><span class="nav-number">1.2.</span> <span class="nav-text">RefCell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E5%BE%AA%E7%8E%AF%E4%B8%8E%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2"><span class="nav-number">1.3.</span> <span class="nav-text">引用循环与内存泄露</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Weak"><span class="nav-number">1.4.</span> <span class="nav-text">Weak</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8%E4%B8%8E%E5%BC%B1%E5%BC%95%E7%94%A8%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB"><span class="nav-number">1.5.</span> <span class="nav-text">强引用与弱引用的主要区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A"><span class="nav-number">1.6.</span> <span class="nav-text">课后作业</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rust进阶，macros 宏 声明式宏（declarative macros） 过程宏 （procedural macros）  常用宏1234567println!(&quot;hello world&quot;); &#x2F;&#x2F; 打印println!&#123;&quot;hello&quot;&#125;println![&quot;hello&quot;]let v &#x3D; vec![1,2];as">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2025/01/12/Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros%20%E5%AE%8F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Rust进阶，macros 宏 声明式宏（declarative macros） 过程宏 （procedural macros）  常用宏1234567println!(&quot;hello world&quot;); &#x2F;&#x2F; 打印println!&#123;&quot;hello&quot;&#125;println![&quot;hello&quot;]let v &#x3D; vec![1,2];as">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-12T02:25:53.085Z">
+<meta property="article:modified_time" content="2025-01-12T02:54:48.202Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2025/01/12/Rust进阶，macros 宏/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/12/Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros%20%E5%AE%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-12T10:25:53+08:00">
+                2025-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Rust进阶，macros-宏"><a href="#Rust进阶，macros-宏" class="headerlink" title="Rust进阶，macros 宏"></a>Rust进阶，macros 宏</h2><ul>
+<li>声明式宏（declarative macros）</li>
+<li>过程宏 （procedural macros）</li>
+</ul>
+<h3 id="常用宏"><a href="#常用宏" class="headerlink" title="常用宏"></a>常用宏</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;hello world&quot;</span>); <span class="comment">// 打印</span></span><br><span class="line"><span class="built_in">println!</span>&#123;<span class="string">&quot;hello&quot;</span>&#125;</span><br><span class="line"><span class="built_in">println!</span>[<span class="string">&quot;hello&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">v</span> = <span class="built_in">vec!</span>[<span class="number">1</span>,<span class="number">2</span>];</span><br><span class="line"><span class="built_in">assert_eq!</span>(<span class="number">1</span>,<span class="number">10</span>); <span class="comment">// 断言是否相等</span></span><br><span class="line"><span class="built_in">panic!</span>(<span class="string">&quot;Something went wrong!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="声明宏"><a href="#声明宏" class="headerlink" title="声明宏"></a>声明宏</h3><ul>
+<li>在 Rust 中，声明宏（declarative macros）是通过 <code>macro_rules!</code> 来定义的。这种宏的定义方式允许我们创建宏来生成代码、简化重复任务、或实现一些特定的功能。以下是一些常见的声明宏类型及其示例：</li>
+</ul>
+<h4 id="panic"><a href="#panic" class="headerlink" title="panic"></a>panic</h4><ul>
+<li><code>println!</code> 是 Rust 标准库中非常常见的一个宏，用来向标准输出打印信息。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>); <span class="comment">// 输出 &quot;Hello, world!&quot; 到控制台</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The value of x is: &#123;&#125;&quot;</span>, x); <span class="comment">// 输出 &quot;The value of x is: 5&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="vec-宏"><a href="#vec-宏" class="headerlink" title="vec! 宏"></a><code>vec!</code> 宏</h4><ul>
+<li><code>vec!</code> 是用于创建一个动态大小的数组（<code>Vec&lt;T&gt;</code>）的宏。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">v</span> = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]; <span class="comment">// 创建一个包含整数的 Vec</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, v); <span class="comment">// 输出: [1, 2, 3, 4, 5]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="assert-eq-和-assert-宏"><a href="#assert-eq-和-assert-宏" class="headerlink" title="assert_eq! 和 assert! 宏"></a><code>assert_eq!</code> 和 <code>assert!</code> 宏</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">y</span> = <span class="number">6</span>;</span><br><span class="line">  <span class="comment">// assert_eq! 用于检查两个值是否相等，如果不相等，程序会 panic。</span></span><br><span class="line">  <span class="built_in">assert_eq!</span>(x,y);</span><br><span class="line">  <span class="comment">// assert! 用于检查表达式是否为 true，如果为 false，程序会 panic。</span></span><br><span class="line">  <span class="built_in">assert!</span>(x &gt; y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="format-宏"><a href="#format-宏" class="headerlink" title="format! 宏"></a><code>format!</code> 宏</h4><ul>
+<li><code>format!</code> 宏与 <code>println!</code> 类似，但是它返回一个 <code>String</code> 类型的格式化字符串，而不是直接打印。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s</span> = <span class="built_in">format!</span>(<span class="string">&quot;The value of x is: &#123;&#125;&quot;</span>, x); <span class="comment">// 返回一个格式化后的字符串</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, s); <span class="comment">// 输出: The value of x is: 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="自定义宏"><a href="#自定义宏" class="headerlink" title="自定义宏"></a>自定义宏</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    macro_rules! square &#123;</span><br><span class="line">        ($x:expr) =&gt; &#123;</span><br><span class="line">            $x * $x</span><br><span class="line">        &#125;;</span><br><span class="line">        () =&gt; &#123;</span><br><span class="line">            0</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    let x = 4;</span><br><span class="line">    let result = square!(x);</span><br><span class="line">    let result = square!();</span><br><span class="line">    println!(&quot;result is &#123;&#125;&quot;, result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="过程宏"><a href="#过程宏" class="headerlink" title="过程宏"></a>过程宏</h3><ul>
+<li>派生宏</li>
+<li>属性宏</li>
+<li>函数宏</li>
+</ul>
+<h4 id="派生宏"><a href="#派生宏" class="headerlink" title="派生宏"></a>派生宏</h4><p>在 Rust 标准库中，有一些内置的派生宏，它们可以帮助你为类型自动实现一些常见的 trait</p>
+<ul>
+<li><code>#[derive(Debug)]</code>：为结构体自动实现 <code>Debug</code> trait，以便可以使用 <code>&#123;:?&#125;</code> 格式化打印</li>
+<li><code>#[derive(Clone)]</code>：为结构体自动实现 <code>Clone</code> trait，允许你复制结构体的值。</li>
+<li><code>#[derive(PartialEq)]</code>：为结构体自动实现 <code>PartialEq</code> trait，允许进行相等比较。</li>
+<li>#[derive(PartialOrd)] :为类型自动实现 <code>PartialOrd</code> trait，使得你可以通过 <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code> 等操作符进行比较。</li>
+<li><code>#[derive(Debug)]</code> :为类型自动实现 <code>Debug</code> trait，使其能够使用 <code>&#123;:?&#125;</code> 或 <code>&#123;:?&#125;</code> 格式化输出</li>
+<li>#[derive(Default)] :为类型自动实现 <code>Default</code> trait，使类型可以通过 <code>Default::default()</code> 来创建一个默认值</li>
+</ul>
+<h4 id="属性宏"><a href="#属性宏" class="headerlink" title="属性宏"></a>属性宏</h4><p>在 Rust 中，属性宏（Attribute Macros）是另一种非常强大的宏类型。它们通常用于对项（如函数、模块、结构体等）添加元数据或进行代码注入。属性宏通常通过 <code>#[...]</code> 的形式附加在 Rust 项目中的各个位置，能够实现许多自动化的功能。</p>
+<ul>
+<li><p><strong><code>#[derive(...)]</code></strong> <code>[derive]</code> 是最常见的属性宏之一，它用来为结构体或枚举自动实现一些常用的 trait，如 <code>Clone</code>、<code>Debug</code>、<code>PartialEq</code> 等。</p>
+</li>
+<li><p><code>#[cfg]</code> 是一个用于条件编译的属性宏，它允许根据某些条件来包含或排除代码块。通常用于平台相关的代码分支（如 <code>cfg(unix)</code>、<code>cfg(target_os = &quot;windows&quot;)</code> 等）。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[cfg(target_os = <span class="string">&quot;macos&quot;</span>)]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">run_on_macos</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Running on!&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">run_on_macos</span>();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>#[repr]</code> 用来指定结构体、枚举或联合体在内存中的布局方式。最常见的使用是 <code>#[repr(C)]</code> 和 <code>#[repr(u8)]</code>。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[repr(C)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">MyStruct</span> &#123;</span><br><span class="line">    a: <span class="type">i32</span>,</span><br><span class="line">    b: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>#[allow(...)]</code> 和 <code>#[deny(...)] </code></strong> 用于控制编译器警告的显示或隐藏。可以用来抑制某些特定的警告。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[allow(dead_code)]</span>  <span class="comment">// 允许存在未使用的代码</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">MyStruct</span> &#123;</span><br><span class="line">    field: <span class="type">i32</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>#[test]</code> 用于标记测试函数，表明该函数是一个单元测试。在运行 <code>cargo test</code> 时，测试函数会被自动识别并执行。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[cfg(test)]</span> <span class="comment">// 确保代码只在测试环境中编译</span></span><br><span class="line"><span class="keyword">mod</span> tests &#123;</span><br><span class="line">    <span class="meta">#[test]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">test_addition</span>() &#123;</span><br><span class="line">        <span class="built_in">assert_eq!</span>(<span class="number">2</span> + <span class="number">2</span>, <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="函数宏"><a href="#函数宏" class="headerlink" title="函数宏"></a>函数宏</h4><ul>
+<li>Rust 的函数宏支持模式匹配，这意味着你可以根据传入的参数类型或数量，生成不同的代码。下面是一个宏，它根据传入的参数不同，生成不同的行为：</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">macro_rules!</span> calculate &#123;</span><br><span class="line">    <span class="comment">// 如果传入两个参数，加法</span></span><br><span class="line">    ($x:expr, +, $y:expr) =&gt; &#123;</span><br><span class="line">        $x + $y</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 如果传入两个参数，减法</span></span><br><span class="line">    ($x:expr, -, $y:expr) =&gt; &#123;</span><br><span class="line">        $x - $y</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 如果传入两个参数，乘法</span></span><br><span class="line">    ($x:expr, *, $y:expr) =&gt; &#123;</span><br><span class="line">        $x * $y</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">sum</span> = calculate!(<span class="number">5</span>, +, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">diff</span> = calculate!(<span class="number">5</span>, -, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">prod</span> = calculate!(<span class="number">5</span>, *, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Sum: &#123;&#125;&quot;</span>, sum);   <span class="comment">// 输出: Sum: 8</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Difference: &#123;&#125;&quot;</span>, diff);  <span class="comment">// 输出: Difference: 2</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Product: &#123;&#125;&quot;</span>, prod);  <span class="comment">// 输出: Product: 15</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">assert_eq!</span>(repeat!(<span class="string">&quot;x&quot;</span>,<span class="number">3</span>) ,<span class="string">&quot;xxx&quot;</span>);</span><br><span class="line"><span class="built_in">assert_eq!</span>(sum!(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>), <span class="number">15</span>);</span><br><span class="line"><span class="built_in">assert_eq!</span>(max_value!(<span class="number">1</span>,<span class="number">8</span>,<span class="number">9</span>), <span class="number">9</span>);</span><br><span class="line"><span class="comment">// 使用macro_rules，实现对应的macro</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>实现 <code>repeat!</code> 宏</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">macro_rules repeat &#123;</span><br><span class="line">  ($s:expr,$n:expr) &#123;</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">str</span> = <span class="type">String</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line">      <span class="keyword">for</span> <span class="variable">_</span> <span class="keyword">in</span> <span class="number">0</span>..$n &#123;</span><br><span class="line">        <span class="type">str</span>.<span class="title function_ invoke__">push</span>($s);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="type">str</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>实现 <code>sum!</code> 宏</p>
+<p><code>sum!</code> 宏需要接受任意数量的数字并返回它们的和。我们可以使用 <code>$(...)*</code> 来匹配多个参数。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">macro_rules!</span> sum &#123;</span><br><span class="line">    ($($x:expr),*) =&gt; &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">total</span> = <span class="number">0</span>;</span><br><span class="line">            $(</span><br><span class="line">                total += $x;</span><br><span class="line">            )*</span><br><span class="line">            total</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现 <code>max_value!</code> 宏</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">macro_rules!</span> max_value &#123;</span><br><span class="line">    ($($x:expr),*) =&gt; &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">max</span> = std::<span class="type">i32</span>::MIN;  <span class="comment">// 初始化为最小值</span></span><br><span class="line">            $(</span><br><span class="line">                <span class="keyword">if</span> $x &gt; max &#123;</span><br><span class="line">                    max = $x;</span><br><span class="line">                &#125;</span><br><span class="line">            )*</span><br><span class="line">            max</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%89%B9%E6%80%A7%EF%BC%88Trait%EF%BC%89/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/01/13/Rust%20%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros-%E5%AE%8F"><span class="nav-number">1.</span> <span class="nav-text">Rust进阶，macros 宏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%8F"><span class="nav-number">1.1.</span> <span class="nav-text">常用宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%AE%8F"><span class="nav-number">1.2.</span> <span class="nav-text">声明宏</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#panic"><span class="nav-number">1.2.1.</span> <span class="nav-text">panic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vec-%E5%AE%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">vec! 宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#assert-eq-%E5%92%8C-assert-%E5%AE%8F"><span class="nav-number">1.2.3.</span> <span class="nav-text">assert_eq! 和 assert! 宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#format-%E5%AE%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">format! 宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%8F"><span class="nav-number">1.2.5.</span> <span class="nav-text">自定义宏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B%E5%AE%8F"><span class="nav-number">1.3.</span> <span class="nav-text">过程宏</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B4%BE%E7%94%9F%E5%AE%8F"><span class="nav-number">1.3.1.</span> <span class="nav-text">派生宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%AE%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">属性宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%AE%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">函数宏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A"><span class="nav-number">1.4.</span> <span class="nav-text">作业</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

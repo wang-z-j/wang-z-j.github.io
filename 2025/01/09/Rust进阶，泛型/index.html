@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rust进阶，泛型泛型例子 当使用泛型定义函数时，本来在函数签名中指定参数和返回值的类型的地方，会改用泛型来表示。采用这种技术，使得代码适应性更强，从而为函数的调用者提供更多的功能，同时也避免了代码的重复。  不是所有 T 类型都能进行相加操作，因此我们需要用 std::ops::Add&lt;Output &#x3D; T&gt; 对 T 进行限制   123456789fn add&lt;T&gt;(a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2025/01/09/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Rust进阶，泛型泛型例子 当使用泛型定义函数时，本来在函数签名中指定参数和返回值的类型的地方，会改用泛型来表示。采用这种技术，使得代码适应性更强，从而为函数的调用者提供更多的功能，同时也避免了代码的重复。  不是所有 T 类型都能进行相加操作，因此我们需要用 std::ops::Add&lt;Output &#x3D; T&gt; 对 T 进行限制   123456789fn add&lt;T&gt;(a">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-09T13:25:42.974Z">
+<meta property="article:modified_time" content="2025-01-10T02:11:12.619Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2025/01/09/Rust进阶，泛型/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/09/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-09T21:25:42+08:00">
+                2025-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Rust进阶，泛型"><a href="#Rust进阶，泛型" class="headerlink" title="Rust进阶，泛型"></a>Rust进阶，泛型</h2><h3 id="泛型例子"><a href="#泛型例子" class="headerlink" title="泛型例子"></a>泛型例子</h3><ul>
+<li><p>当使用泛型定义函数时，本来在函数签名中指定参数和返回值的类型的地方，会改用泛型来表示。采用这种技术，使得代码适应性更强，从而为函数的调用者提供更多的功能，同时也避免了代码的重复。</p>
+</li>
+<li><p>不是所有 <code>T</code> 类型都能进行相加操作，因此我们需要用 <code>std::ops::Add&lt;Output = T&gt;</code> 对 <code>T</code> 进行限制</p>
+</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">add</span>&lt;T&gt;(a: T, b:T) <span class="punctuation">-&gt;</span> T &#123;</span><br><span class="line">    a+b <span class="comment">// cannot add `T` to `T`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">add</span>&lt;T: std::ops::Add&lt;Output = T&gt;&gt;(a: T, b: T) <span class="punctuation">-&gt;</span> T &#123;</span><br><span class="line">        a + b</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在函数定义中使用泛型"><a href="#在函数定义中使用泛型" class="headerlink" title="在函数定义中使用泛型"></a>在函数定义中使用泛型</h3><ul>
+<li>因为 <code>T</code> 可以是任何类型，但不是所有的类型都能进行比较</li>
+<li>准库中定义的 <code>std::cmp::PartialOrd</code> trait 可以实现类型的比较功能。我们限制 <code>T</code> 只对实现了 <code>PartialOrd</code> 的类型有效，标准库为 <code>i32</code> 和 <code>char</code> 实现了 &#96;PartialOrd</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">largest</span>&lt;T:std::cmp::<span class="built_in">PartialOrd</span>&gt; (list: &amp;[T]) <span class="punctuation">-&gt;</span> T &#123;</span><br><span class="line">  	<span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">largest</span> = list[<span class="number">0</span>];</span><br><span class="line">  	<span class="keyword">for</span> <span class="variable">item</span> <span class="keyword">in</span> list &#123;</span><br><span class="line">    	<span class="keyword">if</span> item &gt; largest &#123;</span><br><span class="line">      	largest = item</span><br><span class="line">    	&#125;</span><br><span class="line">  	&#125;</span><br><span class="line">  	largest</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">char_list</span> = <span class="built_in">vec!</span>[<span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;m&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;q&#x27;</span>];</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">largest</span>(&amp;char_list);</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;The largest char is &#123;&#125;&quot;</span>, result);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> <span class="variable">number_list</span> = <span class="built_in">vec!</span>[<span class="number">34</span>, <span class="number">50</span>, <span class="number">25</span>, <span class="number">100</span>, <span class="number">65</span>];</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">largest</span>(&amp;number_list);</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;The largest number is &#123;&#125;&quot;</span>, result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="结构体中的泛型"><a href="#结构体中的泛型" class="headerlink" title="结构体中的泛型"></a>结构体中的泛型</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">  <span class="keyword">struct</span> <span class="title class_">Point</span>&lt;T&gt; &#123;</span><br><span class="line">  	x: T,</span><br><span class="line">  	y:T,</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="keyword">struct</span> <span class="title class_">Point</span>&lt;T,U&gt; &#123;</span><br><span class="line">  	x: T,</span><br><span class="line">  	y:U,</span><br><span class="line">	&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> <span class="variable">p1</span> = Point&#123;x: <span class="number">1</span>, y: <span class="number">2</span>&#125;;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">p2</span> = Point&#123;x:<span class="number">1.1</span>,y:<span class="number">1</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="枚举中使用泛型"><a href="#枚举中使用泛型" class="headerlink" title="枚举中使用泛型"></a>枚举中使用泛型</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Option</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="title function_ invoke__">Some</span>(T),</span><br><span class="line">  <span class="literal">None</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Result</span>&lt;T,E&gt; &#123;</span><br><span class="line">  <span class="title function_ invoke__">Ok</span>(T),</span><br><span class="line">  <span class="title function_ invoke__">Err</span>(E),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法中使用泛型"><a href="#方法中使用泛型" class="headerlink" title="方法中使用泛型"></a>方法中使用泛型</h3><h4 id="impl-之后声明泛型"><a href="#impl-之后声明泛型" class="headerlink" title="impl 之后声明泛型"></a>impl 之后声明泛型</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span>&lt;T&gt; &#123;</span><br><span class="line">    x: T,</span><br><span class="line">    y: T,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">impl</span>&lt;T&gt; Point&lt;T&gt; <span class="punctuation">-&gt;</span> &amp;T&#123;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">x</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">    &amp;<span class="keyword">self</span>.x</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法使用了与结构体定义中不同类型的泛型"><a href="#方法使用了与结构体定义中不同类型的泛型" class="headerlink" title="方法使用了与结构体定义中不同类型的泛型"></a>方法使用了与结构体定义中不同类型的泛型</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span>&lt;X1, Y1&gt; &#123;</span><br><span class="line">    x: X1,</span><br><span class="line">    y: Y1,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span>&lt;X1, Y1&gt; Point&lt;X1, Y1&gt; &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">mixup</span>&lt;X2, Y2&gt;(<span class="keyword">self</span>, other: Point&lt;X2, Y2&gt;) <span class="punctuation">-&gt;</span> Point&lt;X1, Y2&gt; &#123;</span><br><span class="line">        Point &#123;</span><br><span class="line">            x: <span class="keyword">self</span>.x,</span><br><span class="line">            y: other.y,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p1</span> = Point &#123; x: <span class="number">5</span>, y: <span class="number">10.4</span> &#125;;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p2</span> = Point &#123; x: <span class="string">&quot;Hello&quot;</span>, y: <span class="string">&#x27;c&#x27;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p3</span> = p1.<span class="title function_ invoke__">mixup</span>(p2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;p3.x = &#123;&#125;, p3.y = &#123;&#125;&quot;</span>, p3.x, p3.y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="const-泛型"><a href="#const-泛型" class="headerlink" title="const 泛型"></a>const 泛型</h3><h4 id="方式一：-切片-泛型"><a href="#方式一：-切片-泛型" class="headerlink" title="方式一： 切片+ 泛型"></a>方式一： 切片+ 泛型</h4><ul>
+<li>使用数组切片，然后传入 <code>arr</code> 的不可变引用</li>
+<li><code>i32</code> 改成所有类型T的数组</li>
+<li>需要对 <code>T</code> 加一个限制 <code>std::fmt::Debug</code>，该限制表明 <code>T</code> 可以用在 <code>println!(&quot;&#123;:?&#125;&quot;, arr)</code> 中，因为 <code>&#123;:?&#125;</code> 形式的格式化输出需要 <code>arr</code> 实现该特征。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">mian</span>() &#123;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">display_array</span>&lt;T:std::fmt::<span class="built_in">Debug</span>&gt; (arr: &amp;[T]) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, arr);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> <span class="variable">arr</span>: [<span class="type">i32</span>; <span class="number">3</span>] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">  <span class="title function_ invoke__">display_array</span>(&amp;arr);</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">arr</span>: [<span class="type">i32</span>; <span class="number">3</span>] = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">  <span class="title function_ invoke__">display_array</span>(&amp;arr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式二-const-泛型"><a href="#方式二-const-泛型" class="headerlink" title="方式二 const 泛型"></a>方式二 const 泛型</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">diapaly_arr</span>&lt;T::std::fmt::<span class="built_in">Debug</span>,<span class="keyword">const</span> N:<span class="type">usize</span>&gt;(arr: [T;N]) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, arr);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">arr</span>: [<span class="type">i32</span>; <span class="number">3</span>] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">    <span class="title function_ invoke__">display_array</span>(arr);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">arr</span>: [<span class="type">i32</span>; <span class="number">2</span>] = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">    <span class="title function_ invoke__">display_array</span>(arr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="泛型代码的性能"><a href="#泛型代码的性能" class="headerlink" title="泛型代码的性能"></a>泛型代码的性能</h3><p>Rust 通过在编译时进行泛型代码的 <strong>单态化</strong>（<em>monomorphization</em>）来保证效率</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">integer</span> = <span class="title function_ invoke__">Some</span>(<span class="number">5</span>);</span><br><span class="line"><span class="keyword">let</span> <span class="variable">float</span> = <span class="title function_ invoke__">Some</span>(<span class="number">5.0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>编译成</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Option_i32</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">Some</span>(<span class="type">i32</span>),</span><br><span class="line">    <span class="literal">None</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Option_f64</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">Some</span>(<span class="type">f64</span>),</span><br><span class="line">    <span class="literal">None</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">integer</span> = Option_i32::<span class="title function_ invoke__">Some</span>(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">float</span> = Option_f64::<span class="title function_ invoke__">Some</span>(<span class="number">5.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>泛型 <code>Option&lt;T&gt;</code> 被编译器替换为了具体的定义。因为 Rust 会将每种情况下的泛型代码编译为具体类型，使用泛型没有运行时开销。当代码运行时，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/01/08/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/01/10/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F%20lifetime/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">Rust进阶，泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">1.1.</span> <span class="nav-text">泛型例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">在函数定义中使用泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">结构体中的泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">枚举中使用泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.5.</span> <span class="nav-text">方法中使用泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#impl-%E4%B9%8B%E5%90%8E%E5%A3%B0%E6%98%8E%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.5.1.</span> <span class="nav-text">impl 之后声明泛型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E4%BA%86%E4%B8%8E%E7%BB%93%E6%9E%84%E4%BD%93%E5%AE%9A%E4%B9%89%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.5.2.</span> <span class="nav-text">方法使用了与结构体定义中不同类型的泛型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const-%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.6.</span> <span class="nav-text">const 泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A-%E5%88%87%E7%89%87-%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.6.1.</span> <span class="nav-text">方式一： 切片+ 泛型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C-const-%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.6.2.</span> <span class="nav-text">方式二 const 泛型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E6%80%A7%E8%83%BD"><span class="nav-number">1.7.</span> <span class="nav-text">泛型代码的性能</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

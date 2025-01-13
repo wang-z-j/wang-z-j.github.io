@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rust 进阶，闭包闭包介绍 什么是闭包  闭包是一个可以捕获所在环境中的变量的额匿名函数  在rust当中，闭包通过||符号定义，可以想普通函数一样调用，但与普通函数不同，闭包可以访问外包作用域的bianliang    闭包的特点  可以捕获周围作用域的变量 支持作为参数传递给其他函数 可以返回闭包作为函数的返回值 类型推断：闭包通常通过类型推断来确定参数和返回值的类型    闭包定义1234">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2025/01/13/Rust%20%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Rust 进阶，闭包闭包介绍 什么是闭包  闭包是一个可以捕获所在环境中的变量的额匿名函数  在rust当中，闭包通过||符号定义，可以想普通函数一样调用，但与普通函数不同，闭包可以访问外包作用域的bianliang    闭包的特点  可以捕获周围作用域的变量 支持作为参数传递给其他函数 可以返回闭包作为函数的返回值 类型推断：闭包通常通过类型推断来确定参数和返回值的类型    闭包定义1234">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-13T02:15:29.056Z">
+<meta property="article:modified_time" content="2025-01-13T03:17:26.124Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2025/01/13/Rust 进阶，闭包/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/13/Rust%20%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-13T10:15:29+08:00">
+                2025-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Rust-进阶，闭包"><a href="#Rust-进阶，闭包" class="headerlink" title="Rust 进阶，闭包"></a>Rust 进阶，闭包</h2><h3 id="闭包介绍"><a href="#闭包介绍" class="headerlink" title="闭包介绍"></a>闭包介绍</h3><ul>
+<li><p>什么是闭包</p>
+<ul>
+<li><p>闭包是一个可以捕获所在环境中的变量的额匿名函数</p>
+</li>
+<li><p>在rust当中，闭包通过<code>||</code>符号定义，可以想普通函数一样调用，但与普通函数不同，闭包可以访问外包作用域的bianliang</p>
+</li>
+</ul>
+</li>
+<li><p>闭包的特点</p>
+<ul>
+<li>可以捕获周围作用域的变量</li>
+<li>支持作为参数传递给其他函数</li>
+<li>可以返回闭包作为函数的返回值</li>
+<li>类型推断：闭包通常通过类型推断来确定参数和返回值的类型</li>
+</ul>
+</li>
+</ul>
+<h3 id="闭包定义"><a href="#闭包定义" class="headerlink" title="闭包定义"></a>闭包定义</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">add_one</span> = |x:<span class="type">i32</span>| <span class="punctuation">-&gt;</span> <span class="type">i32</span> &#123; x + <span class="number">1</span>&#125;;</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, <span class="title function_ invoke__">add_one</span>(<span class="number">5</span>));  <span class="comment">// 输出：6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略类型</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">add_one</span> = |x| x+<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="闭包的使用"><a href="#闭包的使用" class="headerlink" title="闭包的使用"></a>闭包的使用</h3><h4 id="作为函数的参数"><a href="#作为函数的参数" class="headerlink" title="作为函数的参数"></a>作为函数的参数</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">double</span> = |x:<span class="type">i32</span>| <span class="punctuation">-&gt;</span> x*<span class="number">2</span>;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">apply</span>&lt;F&gt;(f:F) <span class="punctuation">-&gt;</span> <span class="type">i32</span></span><br><span class="line">  <span class="keyword">where</span> F:<span class="title function_ invoke__">fn</span>(<span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="title function_ invoke__">f</span>(<span class="number">3</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">apply</span>(double);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="捕获环境变量"><a href="#捕获环境变量" class="headerlink" title="捕获环境变量"></a>捕获环境变量</h4><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">y</span> = <span class="number">3</span>;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">equal_to</span> = |val| val == x;</span><br><span class="line">  <span class="comment">// fn equal_to(val) -&gt; bool &#123;</span></span><br><span class="line">    <span class="comment">// val == x // 报错 访问不到外层的作用域中的变量</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">  <span class="built_in">assert!</span>(<span class="title function_ invoke__">equal_to</span>(y));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="闭包三种捕获方式"><a href="#闭包三种捕获方式" class="headerlink" title="闭包三种捕获方式"></a>闭包三种捕获方式</h4><h5 id="按值捕获"><a href="#按值捕获" class="headerlink" title="按值捕获"></a>按值捕获</h5><ul>
+<li>将环境变量的所有权移入闭包。</li>
+<li>通过move关键字，下面会介绍</li>
+</ul>
+<h5 id="按引用捕获"><a href="#按引用捕获" class="headerlink" title="按引用捕获"></a>按引用捕获</h5><ul>
+<li>通过引用捕获环境变量。</li>
+<li>示例 参照上面代码</li>
+</ul>
+<h5 id="按可变应用捕获变量"><a href="#按可变应用捕获变量" class="headerlink" title="按可变应用捕获变量"></a>按可变应用捕获变量</h5><ul>
+<li><p>通过可变引用捕获环境变量。</p>
+</li>
+<li><p>示例</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按可变引用捕获环境变量</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">num</span> = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">change_num</span> = |x| num += x;</span><br><span class="line">    <span class="title function_ invoke__">change_num</span>(<span class="number">5</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="move关键字"><a href="#move关键字" class="headerlink" title="move关键字"></a>move关键字</h3><ul>
+<li><p>在参数列表前使用move关键字,可以强制闭包取得它所使用用的环境值的所有权</p>
+<ul>
+<li>当将闭包传递给新线程以移动数据使其归新线程所有时,此技术最为有用。</li>
+</ul>
+</li>
+<li><p>例子</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">equal_to_x</span> = <span class="keyword">move</span> |z| z == x;</span><br><span class="line">    <span class="comment">// println!(&quot;&#123;:?&#125;&quot;, x); // 所有权发生了转移</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">y</span> = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">    <span class="built_in">assert!</span>(<span class="title function_ invoke__">equal_to_x</span>(y))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">test2</span>() &#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">PageCache</span>&lt;U, A&gt; &#123;</span><br><span class="line">        cache: HashMap&lt;(U, A), <span class="type">String</span>&gt;,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">impl</span>&lt;U, A&gt; PageCache&lt;U, A&gt;</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        U: <span class="built_in">Eq</span> + Hash + <span class="built_in">Clone</span>,</span><br><span class="line">        A: <span class="built_in">Eq</span> + Hash + <span class="built_in">Clone</span>,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">new</span>() <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123;</span><br><span class="line">            PageCache &#123;</span><br><span class="line">                cache: HashMap::<span class="title function_ invoke__">new</span>(),</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">get_page</span>&lt;F&gt;(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, user_id: U, article_id: A, render_fn: F) <span class="punctuation">-&gt;</span> <span class="type">String</span></span><br><span class="line">        <span class="keyword">where</span></span><br><span class="line">            F: <span class="title function_ invoke__">Fn</span>(U, A) <span class="punctuation">-&gt;</span> <span class="type">String</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Some</span>(result) = <span class="keyword">self</span>.cache.<span class="title function_ invoke__">get</span>(&amp;(user_id.<span class="title function_ invoke__">clone</span>(), article_id.<span class="title function_ invoke__">clone</span>())) &#123;</span><br><span class="line">                <span class="keyword">return</span> result.<span class="title function_ invoke__">clone</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 获取文章</span></span><br><span class="line">            <span class="keyword">let</span> <span class="variable">rendered_page</span> = <span class="title function_ invoke__">render_fn</span>(user_id.<span class="title function_ invoke__">clone</span>(), article_id.<span class="title function_ invoke__">clone</span>());</span><br><span class="line">            <span class="keyword">self</span>.cache</span><br><span class="line">                .<span class="title function_ invoke__">insert</span>((user_id, article_id), rendered_page.<span class="title function_ invoke__">clone</span>());</span><br><span class="line">            rendered_page</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">page_cache</span> = PageCache::&lt;<span class="type">u32</span>, <span class="type">u32</span>&gt;::<span class="title function_ invoke__">new</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user_id</span>: <span class="type">u32</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">article_id</span>: <span class="type">u32</span> = <span class="number">101</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">rend_fn</span> = |u_id, a_id| <span class="punctuation">-&gt;</span> <span class="type">String</span> &#123;</span><br><span class="line">        <span class="built_in">format!</span>(</span><br><span class="line">            <span class="string">&quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Article by User &#123;&#125;&lt;/h1&gt;&lt;p&gt;Content of article &#123;&#125;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>,</span><br><span class="line">            u_id, article_id</span><br><span class="line">        )</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">page_1</span> = page_cache.<span class="title function_ invoke__">get_page</span>(user_id, article_id, |user_id, article_id| &#123;</span><br><span class="line">        <span class="built_in">format!</span>(</span><br><span class="line">            <span class="string">&quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Article by User &#123;&#125;&lt;/h1&gt;&lt;p&gt;Content of article &#123;&#125;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>,</span><br><span class="line">            user_id, article_id</span><br><span class="line">        )</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, page_1);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">page_2</span> = page_cache.<span class="title function_ invoke__">get_page</span>(user_id, article_id, |user_id, article_id| &#123;</span><br><span class="line">        <span class="built_in">format!</span>(</span><br><span class="line">            <span class="string">&quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Article by User &#123;&#125;&lt;/h1&gt;&lt;p&gt;Content of article &#123;&#125;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>,</span><br><span class="line">            user_id, article_id</span><br><span class="line">        )</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, page_2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/01/12/Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros%20%E5%AE%8F/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85"><span class="nav-number">1.</span> <span class="nav-text">Rust 进阶，闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">闭包介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">闭包定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">闭包的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">作为函数的参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">捕获环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E4%B8%89%E7%A7%8D%E6%8D%95%E8%8E%B7%E6%96%B9%E5%BC%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">闭包三种捕获方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8C%89%E5%80%BC%E6%8D%95%E8%8E%B7"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">按值捕获</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8C%89%E5%BC%95%E7%94%A8%E6%8D%95%E8%8E%B7"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">按引用捕获</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8C%89%E5%8F%AF%E5%8F%98%E5%BA%94%E7%94%A8%E6%8D%95%E8%8E%B7%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">按可变应用捕获变量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#move%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.4.</span> <span class="nav-text">move关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A"><span class="nav-number">1.5.</span> <span class="nav-text">作业</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

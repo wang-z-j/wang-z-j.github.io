@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/05/Rust-L3%20Rust%20%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%BA%BF%E7%A8%8B%E3%80%81%E9%80%9A%E4%BF%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2025/01/05/Rust-L3%20Rust%20%E5%9F%BA%E7%A1%80/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%BA%BF%E7%A8%8B%E3%80%81%E9%80%9A%E4%BF%A1/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-05T10:46:21+08:00">
-                2025-01-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-13T21:41:44+08:00">
+                2025-01-13
               </time>
             
 
@@ -300,35 +300,11 @@
       
         
           
-          Rust-L3 Rust 基础函数组成基础概念1234fn add(a: i32, b: i32) -&gt; i32 &#123;    // return a + b;    a + b&#125;
-
-
-声明函数关键字 fn
-
-函数的位置可以随便放，rust不关心我们在哪里定义了函数
-
-
-函数名
-
-开头字符，后面是数字、下划线、字母 例如：add_2_two
-开头下划线、后面是 数字、下划线、字母,不能只有下划线 例如 _add2
-函数名和变量名用蛇形命名法 例如：sum_fn_2
-
-
-参数及类型
-
-每一个参数都必须指定类型
-
-
-指定返回值类型 -&gt;
-
-语法： -&gt; i32
-
-
+          Rust进阶，线程、通信实现线程的方式Rust 如何创建线程1234567891011121314// 线程的基本用法fn main() &#123;    thread::spawn(|| &#123;        // 不会打印所有结果，因为主线程会结束后 子线程也就结束了        for i in 1..10 &#123;            println!(&quot;hi number &#123;&#125; from the spawned thread!&quot;, i);            thread::sleep(Duration::from_milli
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2025/01/05/Rust-L3%20Rust%20%E5%9F%BA%E7%A1%80/#more" rel="contents">
+            <a class="btn" href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%BA%BF%E7%A8%8B%E3%80%81%E9%80%9A%E4%BF%A1/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -379,7 +355,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/03/Rust-L2%20Rust%E5%8F%98%E9%87%8F%E5%92%8C%E5%8F%AF%E5%8F%98%E6%80%A7/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B5%8B%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -398,7 +374,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2025/01/03/Rust-L2%20Rust%E5%8F%98%E9%87%8F%E5%92%8C%E5%8F%AF%E5%8F%98%E6%80%A7/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B5%8B%E8%AF%95/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -410,8 +386,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-03T12:53:40+08:00">
-                2025-01-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-13T13:40:53+08:00">
+                2025-01-13
               </time>
             
 
@@ -450,28 +426,18 @@
       
         
           
-          Rust-L2 Rust变量和可变性可变变量和不可变变量rust的变量默认是不可变的（immutable），如果想改变变量的值，通过mut关键字声明可变变量
+          Rust进阶，测试Unit 单元测试
+文件
+12│── src/│ ├──libs
 
-不可变变量
-
-1let num = 5; // 可以不指定类型（类型推断）
+示例
 
 
-可变变量
-
-12let mut num = 5;num = 6;
-
-常量1const num:i32 = 5; // 必须声明类型
-
-常量与不可变变量的区别
-声明方式：常量使用const，不可变变量使用let
-值确定时期：常量在编译时确定，不可变变量在运行时期确定
-修改：常量不可修改，不可变变量可以通过遮蔽（shadwoing）修改
-规范：常量需大写、 声明
+1234567891011121314151617181920212223242526272829pub fn add(x: i32, y: i32) -&gt; i32 &#123;    x + y&#125;#[cfg(test)]mod tests &#123;    use super::*;    #[test]    fn test_1() &#123;        add(1, 2);        println!(&quot;test_1&quot;)    &#125;   
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2025/01/03/Rust-L2%20Rust%E5%8F%98%E9%87%8F%E5%92%8C%E5%8F%AF%E5%8F%98%E6%80%A7/#more" rel="contents">
+            <a class="btn" href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B5%8B%E8%AF%95/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -522,7 +488,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/02/Rust-L1%20Rust%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -541,7 +507,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2025/01/02/Rust-L1%20Rust%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -553,8 +519,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-02T17:55:06+08:00">
-                2025-01-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-13T12:17:44+08:00">
+                2025-01-13
               </time>
             
 
@@ -593,27 +559,28 @@
       
         
           
-          Reust-L1 Rust环境搭建环境搭建(mac系统)
-通过 rustup 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。
-
-1curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-
-添加环境变量
-
-1echo &#x27;source $HOME/.cargo/env&#x27; &gt;&gt; ~/.zshrc
+          Rust进阶，迭代器什么迭代器
+迭代器模式:对一系列项执行某些任务
+迭代器负责:
+遍历每个项
+确定序列(遍历)何时完成
 
 
-检查是否安装成功
+Rust的迭代器:
+懒惰的:除非调用消费迭代器的方法,否则迭代器本身没有任何效果。
 
-1rustc -V
 
-出现rustc 1.83.0 (90b35a623 2024-11-26)表示安装成功
-cargo使用cargo初始
+
+迭代器实现
+iter方法:在不可变引用上创建迭代器
+into_iter方法:创建的迭代器会获得所有权
+iter_mut方法:迭代可变的引用
+
+123456789101112fn _iter_1() &#123;    let mut numbers = vec![1, 2, 3, 4];    let mut iter = numbers.iter_mut();    // let 
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2025/01/02/Rust-L1%20Rust%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/#more" rel="contents">
+            <a class="btn" href="/2025/01/13/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -664,7 +631,7 @@ cargo使用cargo初始
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/02/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/13/Rust%20%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -683,7 +650,7 @@ cargo使用cargo初始
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2025/01/02/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2025/01/13/Rust%20%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -695,8 +662,8 @@ cargo使用cargo初始
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-02T17:41:00+08:00">
-                2025-01-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-13T10:15:29+08:00">
+                2025-01-13
               </time>
             
 
@@ -735,15 +702,823 @@ cargo使用cargo初始
       
         
           
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;
+          Rust 进阶，闭包闭包介绍
+什么是闭包
 
-More info: Writing
-Run server1$ hexo ser
+闭包是一个可以捕获所在环境中的变量的额匿名函数
+
+在rust当中，闭包通过||符号定义，可以想普通函数一样调用，但与普通函数不同，闭包可以访问外包作用域的bianliang
+
+
+
+闭包的特点
+
+可以捕获周围作用域的变量
+支持作为参数传递给其他函数
+可以返回闭包作为函数的返回值
+类型推断：闭包通常通过类型推断来确定参数和返回值的类型
+
+
+
+闭包定义12345let add_one = |x:i32| -&gt; i32 &#123; x + 1&#125;;println!(&quot;&#123;&#125;&quot;, add_one(5)); 
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2025/01/02/hello-world/#more" rel="contents">
+            <a class="btn" href="/2025/01/13/Rust%20%E8%BF%9B%E9%98%B6%EF%BC%8C%E9%97%AD%E5%8C%85/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/12/Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros%20%E5%AE%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2025/01/12/Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros%20%E5%AE%8F/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-12T10:25:53+08:00">
+                2025-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Rust进阶，macros 宏
+声明式宏（declarative macros）
+过程宏 （procedural macros）
+
+常用宏1234567println!(&quot;hello world&quot;); // 打印println!&#123;&quot;hello&quot;&#125;println![&quot;hello&quot;]let v = vec![1,2];assert_eq!(1,10); // 断言是否相等panic!(&quot;Something went wrong!&quot;)
+
+
+
+声明宏
+在 Rust 中，声明宏（declarative m
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2025/01/12/Rust%E8%BF%9B%E9%98%B6%EF%BC%8Cmacros%20%E5%AE%8F/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%89%B9%E6%80%A7%EF%BC%88Trait%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%89%B9%E6%80%A7%EF%BC%88Trait%EF%BC%89/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-11T21:52:28+08:00">
+                2025-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Rust进阶，特性（Trait）定义特征与实现普通实现为类型实现特征12345678910111213141516171819202122232425pub trait Summary &#123;    fn summarize(&amp;self) -&gt; String;&#125;pub struct Post &#123;    pub title: String, // 标题    pub author: String, // 作者    pub content: String, // 内容&#125;impl Summary for Post &#123;    fn summ
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E7%89%B9%E6%80%A7%EF%BC%88Trait%EF%BC%89/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%882/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%882/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-11T14:55:35+08:00">
+                2025-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Rust进阶，智能指针2Rc 引用计数指针1234567891011121314151617181920fn main() &#123;    #[derive(Debug)]    enum List &#123;        Cons(i32, Rc&lt;List&gt;),        Nil,    &#125;    use List::&#123;Cons, Nil&#125;;    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));    println!(&quot;&#123;&#125;&quot;,
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2025/01/11/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%882/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/10/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F%20lifetime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2025/01/10/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F%20lifetime/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-10T14:29:04+08:00">
+                2025-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Rust进阶，声明周期 lifetime生命周期
+悬垂指针
+内存释放
+
+1234567891011fn mian() &#123;    let x_ref = &#123;        let x: i32 = 10;      	// x 是一个局部变量，其生命周期仅限于代码块 &#123;&#125; 内。也就是说，当 &#123;&#125; 代码块执行完毕后，x 的内存会被释放。        // 这段代码块执行完，x的生命周期就已经结束了，&amp;x就导致了悬空引用        // &amp;x的生命周期不够长，无法支持x_ref的生命周期              &a
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2025/01/10/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F%20lifetime/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/09/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2025/01/09/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-09T21:25:42+08:00">
+                2025-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Rust进阶，泛型泛型例子
+当使用泛型定义函数时，本来在函数签名中指定参数和返回值的类型的地方，会改用泛型来表示。采用这种技术，使得代码适应性更强，从而为函数的调用者提供更多的功能，同时也避免了代码的重复。
+
+不是所有 T 类型都能进行相加操作，因此我们需要用 std::ops::Add&lt;Output = T&gt; 对 T 进行限制
+
+
+123456789fn add&lt;T&gt;(a: T, b:T) -&gt; T &#123;    a+b // cannot add `T` to `T`&#125;fn main() &#123;    fn add&lt;T: std::
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2025/01/09/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%B3%9B%E5%9E%8B/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/08/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2025/01/08/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-08T21:24:33+08:00">
+                2025-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Rust进阶，智能指针什么是智能指针
+智能指针（Smart Pointers）是一类数据结构，它不仅包含一个指针，还附带一些额外的元数据和功能。与普通指针不同，智能指针在 Rust 中实现了 Deref 和 Drop 两个 trait，这使得它们可以像指针一样解引用并在离开作用域时自动清理资源。
+
+为什么存在智能指针
+资源管理
+自动管理资源的分配和释放，避免内存泄露
+
+
+所有权与借用
+Rust 的所有权系统通过智能指针来确保内存安全，避免数据竞争和悬垂指针。
+
+
+复杂数据结构
+通过智能指针可以构建复杂的数据结构，如递归结构、共享数据等。
+
+
+
+智能指针的特性
+Deref Trait
+实现了 D
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2025/01/08/Rust%E8%BF%9B%E9%98%B6%EF%BC%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -784,6 +1559,10 @@ Run server1$ hexo ser
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -827,7 +1606,7 @@ Run server1$ hexo ser
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
